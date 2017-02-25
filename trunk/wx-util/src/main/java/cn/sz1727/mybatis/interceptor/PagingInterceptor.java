@@ -16,8 +16,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.sz1727l.core.util.XPropertiesUtil;
-import cn.sz1727l.core.util.XStringUtil;
+import cn.sz1727.core.util.XPropertiesUtil;
+import cn.sz1727.core.util.XStringUtil;
 
 /**
  * cn.sz1727.mybatis.interceptor.PagingInterception.java

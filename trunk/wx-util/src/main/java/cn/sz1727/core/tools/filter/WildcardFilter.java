@@ -1,8 +1,8 @@
 package cn.sz1727.core.tools.filter;
 
-import static cn.sz1727l.core.util.XClassUtil.equal;
-import static cn.sz1727l.core.util.XClassUtil.hash;
-import cn.sz1727l.core.util.XStringUtil;
+import static cn.sz1727.core.util.XClassUtil.equal;
+import static cn.sz1727.core.util.XClassUtil.hash;
+import cn.sz1727.core.util.XStringUtil;
 
 /**
  * <p>

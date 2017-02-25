@@ -1,7 +1,7 @@
 package cn.sz1727.core.i18n;
 
 import cn.sz1727.core.exception.NullArgumentException;
-import cn.sz1727l.core.util.XStringUtil;
+import cn.sz1727.core.util.XStringUtil;
 
 /**
  * cn.sz1727.core.i18n.AbstractMessageFactory.java

@@ -3,7 +3,7 @@ package cn.sz1727.core.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.sz1727l.core.util.XCollectionUtil;
+import cn.sz1727.core.util.XCollectionUtil;
 
 /**
  * Encapsulates the focus for configuration viewing through

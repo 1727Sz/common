@@ -21,7 +21,7 @@ import cn.sz1727.core.exception.DaoException;
 import cn.sz1727.core.exception.MallRuntimeException;
 import cn.sz1727.core.i18n.AbstractErrorMessageFactory;
 import cn.sz1727.core.i18n.CoreErrorMessages;
-import cn.sz1727l.core.util.XMapUtil;
+import cn.sz1727.core.util.XMapUtil;
 
 /**
  * JPA数据持久层基类

@@ -2,7 +2,7 @@ package cn.sz1727.core.db;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
-import cn.sz1727l.core.util.XDesEncrypt;
+import cn.sz1727.core.util.XDesEncrypt;
 
 /**
  * cn.sz1727.core.db.MallBasicDataSource.java

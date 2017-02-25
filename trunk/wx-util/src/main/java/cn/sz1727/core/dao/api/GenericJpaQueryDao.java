@@ -17,9 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import cn.sz1727.core.exception.DaoException;
 import cn.sz1727.core.i18n.CoreErrorMessages;
-import cn.sz1727l.core.util.XCollectionUtil;
-import cn.sz1727l.core.util.XMapUtil;
-import cn.sz1727l.core.util.XStringUtil;
+import cn.sz1727.core.util.XCollectionUtil;
+import cn.sz1727.core.util.XMapUtil;
+import cn.sz1727.core.util.XStringUtil;
 
 /**
  * JPA数据持久层基础查询类

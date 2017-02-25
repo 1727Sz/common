@@ -7,7 +7,7 @@ import java.net.URLEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.sz1727l.core.util.XStringUtil;
+import cn.sz1727.core.util.XStringUtil;
 
 /**
  * 转码

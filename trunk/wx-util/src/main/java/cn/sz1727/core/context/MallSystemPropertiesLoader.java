@@ -17,7 +17,7 @@ import cn.sz1727.core.config.PropertyLoader;
 import cn.sz1727.core.exception.LoadingSystemPropertyException;
 import cn.sz1727.core.exception.ProjectIdNotConfiguredException;
 import cn.sz1727.core.i18n.CoreErrorMessages;
-import cn.sz1727l.core.util.XStringUtil;
+import cn.sz1727.core.util.XStringUtil;
 
 /**
  * cn.sz1727.core.context.MallSystemPropertiesLoader.java

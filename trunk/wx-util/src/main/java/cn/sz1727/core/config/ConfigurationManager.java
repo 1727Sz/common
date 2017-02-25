@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import cn.sz1727.core.exception.MallRuntimeException;
 import cn.sz1727.core.exception.UncheckedException;
 import cn.sz1727.core.i18n.CoreErrorMessages;
-import cn.sz1727l.core.util.XIOUtil;
-import cn.sz1727l.core.util.XStringUtil;
+import cn.sz1727.core.util.XIOUtil;
+import cn.sz1727.core.util.XStringUtil;
 
 /**
  * cn.sz1727.core.config.ConfigurationManager.java
