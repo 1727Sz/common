@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+	http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util-3.0.xsd
+    http://www.springframework.org/schema/task   
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<bean id="propertyConfigurerForProject1" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="order" value="1" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath*:db.properties</value>
+				<value>classpath*:orm.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	
+
+	<bean id="dataSource" class="cn.sz1727.core.db.MallBasicDataSource" destroy-method="close" lazy-init="default" autowire="default">
+		<!-- Retrieve database metadata from db.properties -->
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${db.jdbc.url}" />
+		<property name="username" value="${db.jdbc.username}" />
+		<property name="password" value="${db.jdbc.password}" />
+
+		<!-- Retrieve database pool metadata from orm.properties -->
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="logAbandoned" value="${jdbc.logAbandoned}" />
+		<property name="removeAbandoned" value="${jdbc.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}" />
+		<property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+		<property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+		<property name="testOnReturn" value="${jdbc.testOnReturn}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+		<property name="numTestsPerEvictionRun" value="${jdbc.numTestsPerEvictionRun}" />
+	</bean>
+
+	<bean id="dataSourceProxy" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+		<property name="targetDataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Persistence unit manager -->
+	<bean id="persistenceUnitManager" class="cn.sz1727.core.dao.api.MergingPersistenceUnitManager">
+		<property name="persistenceXmlLocations">
+			<list>
+				<value>${persistence.xml.location}</value>
+			</list>
+		</property>
+		<property name="dataSources">
+			<map>
+				<entry key="default" value-ref="dataSourceProxy" />
+			</map>
+		</property>
+		<property name="defaultDataSource" ref="dataSourceProxy" />
+	</bean>
+
+	<!-- Entity manager factory -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitManager" ref="persistenceUnitManager" />
+		<property name="persistenceUnitName" value="default" />
+		<property name="loadTimeWeaver">
+			<bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
+		</property>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="database" value="${orm.database}" />
+				<property name="databasePlatform" value="${orm.databasePlatform}" />
+				<property name="showSql" value="${orm.showSql}" />
+				<property name="generateDdl" value="${orm.generateDdl}" />
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">${orm.ddlAuto}</prop>
+				<prop key="hibernate.connection.charSet">${orm.connection.charset}</prop>
+				<prop key="javax.persistence.validation.mode">${orm.validation.mode}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.sz1727.wx.mapper" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceProxy" />
+		<property name="mapperLocations" value="classpath*:META-INF/sqlxml/*Mapper.xml" />
+		<property name="typeAliasesPackage" value="cn.sz1727.wx.mapper" />
+	</bean>
+
+	<!-- Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
+	<bean id="jpaTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<qualifier value="MUMEm" />
+		<property name="dataSource" ref="dataSourceProxy" />
+	</bean>
+
+	<tx:advice id="jpa-txAdvice" transaction-manager="jpaTransactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="find*" propagation="NOT_SUPPORTED" read-only="true" />
+			<tx:method name="get*" propagation="NOT_SUPPORTED" read-only="true" />
+			<tx:method name="load*" propagation="NOT_SUPPORTED" read-only="true" />
+			<tx:method name="query*" propagation="NOT_SUPPORTED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="jpa-bizMethods" expression="execution(* cn.sz1727.wx.service..*.*(..))" />
+		<aop:advisor advice-ref="jpa-txAdvice" pointcut-ref="jpa-bizMethods" />
+	</aop:config>
+
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor">
+		<property name="defaultPersistenceUnitName" value="default" />
+	</bean>
+
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+</beans>
